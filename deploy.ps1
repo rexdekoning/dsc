@@ -1,51 +1,9 @@
-<#
- .SYNOPSIS
-    Deploys a template to Azure
-
- .DESCRIPTION
-    Deploys an Azure Resource Manager template
-
- .PARAMETER subscriptionId
-    The subscription id where the template will be deployed.
-
- .PARAMETER resourceGroupName
-    The resource group where the template will be deployed. Can be the name of an existing or a new resource group.
-
- .PARAMETER resourceGroupLocation
-    Optional, a resource group location. If specified, will try to create a new resource group in this location. If not specified, assumes resource group is existing.
-
- .PARAMETER deploymentName
-    The deployment name.
-
- .PARAMETER templateFilePath
-    Optional, path to the template file. Defaults to template.json.
-
- .PARAMETER parametersFilePath
-    Optional, path to the parameters file. Defaults to parameters.json. If file is not found, will prompt for parameter values based on template.
-#>
-
-param(
- [Parameter(Mandatory=$True)]
- [string]
- $subscriptionId,
-
- [Parameter(Mandatory=$True)]
- [string]
- $resourceGroupName,
-
- [string]
- $resourceGroupLocation,
-
- [Parameter(Mandatory=$True)]
- [string]
- $deploymentName,
-
- [string]
- $templateFilePath = "template.json",
-
- [string]
- $parametersFilePath = "parameters.json"
-)
+$subscriptionId = 'ccf2585b-01d6-48c6-961a-b42c17f48ba1'
+$resourceGroupName = 'rsgrdkcont02'
+$resourceGroupLocation = 'westeurope'
+$deploymentName = 'deploymentrex'
+$templateFilePath = 'template.json'
+$parametersFilePath = 'parameters.json'
 
 <#
 .SYNOPSIS

@@ -24,7 +24,7 @@
             "value": "rdkcont02-nsg"
         },
         "adminPassword": {
-            "value": null
+            "value": "heelgeheim@1"
         },
         "storageAccountName": {
             "value": "rsgrdkcont02disks460"
