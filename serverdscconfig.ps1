@@ -20,7 +20,7 @@ Configuration MyDscConfiguration {
         {            
             GetScript = { @{FilesDownloaded = $(Test-Path -Path 'c:\downloadsource\scripts.zip') } }
             TestScript = { Test-Path -Path 'c:\downloadsource\scripts.zip' }                     
-            SetScript = { Invoke-WebRequest '' -OutFile 'c:\downloadsource\scripts.zip' }
+            SetScript = { Invoke-WebRequest 'https://github.com/rexdekoning/dsc/blob/master/scripts.zip?raw=true' -OutFile 'c:\downloadsource\scripts.zip' }
             DependsOn = '[File]DownloadFolder'            
         }
 
