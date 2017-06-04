@@ -82,7 +82,7 @@
                         "version": "latest"
                     },
                     "osDisk": {
-                        "createOption": "fromImage",
+                        "createOption": "FromImage",
                         "vhd": {
                             "uri": "[concat(concat(reference(resourceId('rsgrdkcont02', 'Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2015-06-15').primaryEndpoints['blob'], 'vhds/'), parameters('virtualMachineName'), '20170602220658.vhd')]"
                         },

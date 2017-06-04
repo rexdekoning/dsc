@@ -7,11 +7,6 @@ Configuration MyDscConfiguration {
     Import-DscResource -ModuleName 'PSDesiredStateConfiguration'
 
     Node $ComputerName {
-        WindowsFeature containers { 
-             Name = 'Containers' 
-             Ensure = 'Present' 
-        }
-
         File DownloadFolder
         {
             Type            = 'Directory'
@@ -26,7 +21,10 @@ Configuration MyDscConfiguration {
                 return @{Result = $FilesDownloaded}
             }
             TestScript = { Test-Path -Path 'c:\downloadsource\scripts.zip' }                     
-            SetScript = { Invoke-WebRequest 'https://github.com/rexdekoning/dsc/blob/master/scripts.zip?raw=true' -OutFile 'c:\downloadsource\scripts.zip' }
+            SetScript = { 
+                Write-Verbose -Message 'Download Scripts'
+                Invoke-WebRequest 'https://github.com/rexdekoning/dsc/blob/master/scripts.zip?raw=true' -OutFile 'c:\downloadsource\scripts.zip' 
+            }
             DependsOn = '[File]DownloadFolder'            
         }
 
@@ -58,17 +56,34 @@ Configuration MyDscConfiguration {
             DependsOn       = '[Archive]UnZipDownload' 
         }
 
+        Script ExecutionPolicy
+        {
+            SetScript = {
+                Write-Verbose -Message 'Set Execution Policy'
+                Set-ExecutionPolicy RemoteSigned -Force
+            }
+            TestScript = { $false }
+            GetScript  = { @{} }
+        }
+
         Script InstallDocker            
         {            
-            GetScript = {   
-                $FilesDownloaded = Test-Path -Path 'c:\downloadsource\scripts.zip'  
-                return @{Result = $FilesDownloaded}
-            }
-            TestScript = { Test-Path -Path 'c:\downloadsource\scripts.zip' }                     
+            GetScript = {@{} }
+            TestScript = { 
+                $return = $false;
+                $service = get-service -name docker -ErrorAction SilentlyContinue
+                if ($service) { $return = $true}
+                $return
+            }                     
             SetScript = { 
+                Write-Verbose -Message 'Installing NuGet'
                 Install-PackageProvider -Name NuGet -Force
-                Install-Package -Name docker -ProviderName DockerMsftProvider -Force }
-            DependsOn = '[File]DockerMsFtModule'            
+                Write-Verbose -Message 'Installing Docker'
+                Install-Package -Name docker -ProviderName DockerMsftProvider -Force 
+                Write-Verbose -Message 'Rebooting'
+                Restart-Computer -Force
+            }
+            DependsOn = @('[Script]ExecutionPolicy','[File]DockerMsFtModule')       
         }
     }
 }
