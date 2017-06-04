@@ -3,6 +3,9 @@ Configuration MyDscConfiguration {
     param(
         [string[]]$ComputerName="localhost"
     )
+
+    Import-DscResource -ModuleName 'PSDesiredStateConfiguration'
+
     Node $ComputerName {
         WindowsFeature containers { 
              Name = 'Containers' 
@@ -18,7 +21,10 @@ Configuration MyDscConfiguration {
 
         Script DownloadScript            
         {            
-            GetScript = { @{FilesDownloaded = $(Test-Path -Path 'c:\downloadsource\scripts.zip') } }
+            GetScript = {   
+                $FilesDownloaded = Test-Path -Path 'c:\downloadsource\scripts.zip'  
+                return @{Result = $FilesDownloaded}
+            }
             TestScript = { Test-Path -Path 'c:\downloadsource\scripts.zip' }                     
             SetScript = { Invoke-WebRequest 'https://github.com/rexdekoning/dsc/blob/master/scripts.zip?raw=true' -OutFile 'c:\downloadsource\scripts.zip' }
             DependsOn = '[File]DownloadFolder'            
@@ -35,7 +41,7 @@ Configuration MyDscConfiguration {
         File DockerModule
         {
             Type            = 'Directory'
-            SourcePath      = 'c:\downloadsource\docker'
+            SourcePath      = 'c:\downloadsource\scripts\docker'
             DestinationPath = 'C:\Program Files\WindowsPowerShell\Modules\Docker'
             Recurse         = $true
             Ensure          = 'Present'
@@ -45,7 +51,7 @@ Configuration MyDscConfiguration {
         File DockerMsFtModule
         {
             Type            = 'Directory'
-            SourcePath      = 'c:\downloadsource\dockermsftprovider'
+            SourcePath      = 'c:\downloadsource\scripts\dockermsftprovider'
             DestinationPath = 'C:\Program Files\WindowsPowerShell\Modules\DockerMsftProvider'
             Recurse         = $true
             Ensure          = 'Present'
@@ -54,9 +60,14 @@ Configuration MyDscConfiguration {
 
         Script InstallDocker            
         {            
-            GetScript = { @{FilesDownloaded = $(Test-Path -Path 'c:\downloadsource\scripts.zip') } }
+            GetScript = {   
+                $FilesDownloaded = Test-Path -Path 'c:\downloadsource\scripts.zip'  
+                return @{Result = $FilesDownloaded}
+            }
             TestScript = { Test-Path -Path 'c:\downloadsource\scripts.zip' }                     
-            SetScript = { Install-Package -Name docker -ProviderName DockerMsftProvider -Force }
+            SetScript = { 
+                Install-PackageProvider -Name NuGet -Force
+                Install-Package -Name docker -ProviderName DockerMsftProvider -Force }
             DependsOn = '[File]DockerMsFtModule'            
         }
     }
