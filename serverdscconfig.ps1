@@ -99,7 +99,7 @@ Configuration MyDscConfiguration {
             GetScript = {@{} }
             TestScript = { 
                 $return = $true;
-                $service = get-service -name docker -ErrorAction SilentlyContinue
+                $service = get-service -name docker | Where-Object { $_.Status -eq "Running" } -ErrorAction SilentlyContinue
                 if ($service) { $return = $false}
                 $return
             }                     
