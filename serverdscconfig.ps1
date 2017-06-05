@@ -93,6 +93,30 @@ Configuration MyDscConfiguration {
             }
             DependsOn = @('[Script]ExecutionPolicy','[File]DockerMsFtModule')       
         }
+
+        Script InstallLatestDefaultImages           
+        {            
+            GetScript = {@{} }
+            TestScript = { 
+                $return = $true;
+                $service = get-service -name docker -ErrorAction SilentlyContinue
+                if ($service) { $return = $false}
+                $return
+            }                     
+            SetScript = { 
+                $RequiredContainers = @('microsoft/nanoserver:latest','stefanscherer/node-windows:6.7.0-nano')
+                $Containers = Get-ContainerImage | Where-Object {$_.RepoTags -in $RequiredContainers}
+                if ($Containers.Length -lt $RequiredContainers.Length) {
+                    foreach($image in $RequiredContainers) {
+                        $Exist = Get-ContainerImage -ImageIdOrName $image
+                        if (!$Exist) {
+                            docker pull $image
+                        }
+                    }
+                }
+            }
+            DependsOn = '[Script]ExecutionPolicy'
+        }
     }
 }
 
