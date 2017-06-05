@@ -9,7 +9,7 @@
             "value": "westeurope"
         },
         "virtualMachineName": {
-            "value": "rdkcont02"
+            "value": "rdkwin20162"
         },
         "virtualMachineSize": {
             "value": "Standard_A1"
@@ -18,34 +18,34 @@
             "value": "rex"
         },
         "virtualNetworkName": {
-            "value": "rsgrdkcont02-vnet"
+            "value": "rsgrdk03-vnet"
         },
         "networkInterfaceName": {
-            "value": "rdkcont02341"
+            "value": "rdkwin20162914"
         },
         "networkSecurityGroupName": {
-            "value": "rdkcont02-nsg"
+            "value": "rdkwin20162-nsg"
         },
         "adminPassword": {
             "value": "heelgeheim@1"
         },
         "storageAccountName": {
-            "value": "rsgrdkcont02disks460"
+            "value": "rsgrdk03disks304"
         },
         "storageAccountType": {
             "value": "Standard_LRS"
         },
         "addressPrefix": {
-            "value": "10.0.1.0/24"
+            "value": "10.0.2.0/24"
         },
         "subnetName": {
             "value": "default"
         },
         "subnetPrefix": {
-            "value": "10.0.1.0/24"
+            "value": "10.0.2.0/24"
         },
         "publicIpAddressName": {
-            "value": "rdkcont02-ip"
+            "value": "rdkwin20162-ip"
         },
         "publicIpAddressType": {
             "value": "Dynamic"
@@ -60,7 +60,7 @@
             "value": "/dsc/blob/master/serverdscconfig.ps1.zip?raw=true"
         },
         "_artifactsFunction": {
-            "value": "MyDscConfiguration"
+            "value": "serverdscconfig.ps1\\MyDscConfiguration"
         }
     }
 }

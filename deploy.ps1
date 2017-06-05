@@ -2,9 +2,10 @@ $subscriptionId = 'ccf2585b-01d6-48c6-961a-b42c17f48ba1'
 $resourceGroupName = 'rsgrdkcont02'
 $resourceGroupLocation = 'westeurope'
 $deploymentName = 'deploymentrex'
-$templateFilePath = 'template.json'
-$parametersFilePath = 'parameters.json'
-
+#$templateFilePath = 'template.json'
+#$parametersFilePath = 'parameters.json'
+$templateFilePath = 'win2016.template.json'
+$parametersFilePath = 'win2016.parameters.json'
 <#
 .SYNOPSIS
     Registers RPs
@@ -46,9 +47,6 @@ $resourceGroup = Get-AzureRmResourceGroup -Name $resourceGroupName -ErrorAction 
 if(!$resourceGroup)
 {
     Write-Host "Resource group '$resourceGroupName' does not exist. To create a new resource group, please enter a location.";
-    if(!$resourceGroupLocation) {
-        $resourceGroupLocation = Read-Host "resourceGroupLocation";
-    }
     Write-Host "Creating resource group '$resourceGroupName' in location '$resourceGroupLocation'";
     New-AzureRmResourceGroup -Name $resourceGroupName -Location $resourceGroupLocation
 }

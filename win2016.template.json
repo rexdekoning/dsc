@@ -93,13 +93,13 @@
                     "imageReference": {
                         "publisher": "MicrosoftWindowsServer",
                         "offer": "WindowsServer",
-                        "sku": "2016-Datacenter-with-Containers",
+                        "sku": "2016-Datacenter",
                         "version": "latest"
                     },
                     "osDisk": {
-                        "createOption": "FromImage",
+                        "createOption": "fromImage",
                         "vhd": {
-                            "uri": "[concat(concat(reference(resourceId(parameters('resourcegroup'), 'Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2015-06-15').primaryEndpoints['blob'], 'vhds/'), parameters('virtualMachineName'), '20170602220658.vhd')]"
+                            "uri": "[concat(concat(reference(resourceId(parameters('resourcegroup'), 'Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2015-06-15').primaryEndpoints['blob'], 'vhds/'), parameters('virtualMachineName'), '20170604194015.vhd')]"
                         },
                         "name": "[parameters('virtualMachineName')]"
                     },
@@ -224,11 +224,7 @@
                 "autoUpgradeMinorVersion": true,
                 "settings": {
                     "modulesUrl": "[concat(parameters('_artifactsLocation'), parameters('_artifactsFileName'))]",
-                    "sasToken": "[parameters('_artifactsLocationSasToken')]",
-                    "configurationFunction": "[parameters('_artifactsFunction')]",
-                    "properties": {
-                        "nodeName": "[parameters('virtualMachineName')]"
-                    }
+                    "configurationFunction": "[parameters('_artifactsFunction')]"
                 },
                 "protectedSettings": {}
             }
