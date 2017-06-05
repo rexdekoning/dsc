@@ -7,6 +7,14 @@ Configuration MyDscConfiguration {
     Import-DscResource -ModuleName 'PSDesiredStateConfiguration'
 
     Node $ComputerName {
+        LocalConfigurationManager
+        {
+            ConfigurationMode = 'ApplyAndAutoCorrect'
+            RebootNodeIfNeeded = $true
+            ActionAfterReboot = 'ContinueConfiguration'
+            AllowModuleOverwrite = $true
+        }
+ 
         File DownloadFolder
         {
             Type            = 'Directory'

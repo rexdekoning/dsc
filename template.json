@@ -2,6 +2,9 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "resourcegroup": {
+            "type": "string"
+        },
         "location": {
             "type": "string"
         },
@@ -46,10 +49,19 @@
         },
         "publicIpAddressType": {
             "type": "string"
+        },
+        "_artifactsLocation": {
+            "type": "string"
+        },
+        "_artifactsLocationSasToken": {
+            "type": "string"
+        },
+        "_artifactsFileName": {
+            "type": "string"
         }
     },
     "variables": {
-        "vnetId": "[resourceId('rsgrdkcont02','Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "vnetId": "[resourceId(parameters('resourcegroup'),'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]"
     },
     "resources": [
@@ -84,7 +96,7 @@
                     "osDisk": {
                         "createOption": "FromImage",
                         "vhd": {
-                            "uri": "[concat(concat(reference(resourceId('rsgrdkcont02', 'Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2015-06-15').primaryEndpoints['blob'], 'vhds/'), parameters('virtualMachineName'), '20170602220658.vhd')]"
+                            "uri": "[concat(concat(reference(resourceId(parameters('resourcegroup'), 'Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2015-06-15').primaryEndpoints['blob'], 'vhds/'), parameters('virtualMachineName'), '20170602220658.vhd')]"
                         },
                         "name": "[parameters('virtualMachineName')]"
                     },
@@ -149,13 +161,13 @@
                             },
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIpAddress": {
-                                "id": "[resourceId('rsgrdkcont02','Microsoft.Network/publicIpAddresses', parameters('publicIpAddressName'))]"
+                                "id": "[resourceId(parameters('resourcegroup'),'Microsoft.Network/publicIpAddresses', parameters('publicIpAddressName'))]"
                             }
                         }
                     }
                 ],
                 "networkSecurityGroup": {
-                    "id": "[resourceId('rsgrdkcont02', 'Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
+                    "id": "[resourceId(parameters('resourcegroup'), 'Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
                 }
             }
         },
@@ -189,6 +201,33 @@
                         }
                     }
                 ]
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('virtualMachineName'), '/DSCScript1')]",
+            "apiVersion": "2015-06-15",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "[concat(parameters('virtualMachineName'), '/DSCScript1')]"
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.Powershell",
+                "type": "DSC",
+                "typeHandlerVersion": "2.9",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "modulesUrl": "[concat(parameters('_artifactsLocation'), parameters('_artifactsFileName'))]",
+                    "sasToken": "[parameters('_artifactsLocationSasToken')]",
+                    "configurationFunction": "CONFIGURATION_FUNCTION",
+                    "properties": {
+                        "nodeName": "[parameters('virtualMachineName')]"
+                    }
+                },
+                "protectedSettings": {}
             }
         }
     ],
