@@ -2,12 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "resourcegroupnme": {
-            "value": "rsgrdkcont02"
-        },
-        "location": {
-            "value": "westeurope"
-        },
         "virtualMachineName": {
             "value": "rdkwin20162"
         },
@@ -17,50 +11,20 @@
         "adminUsername": {
             "value": "rex"
         },
-        "virtualNetworkName": {
-            "value": "rsgrdk03-vnet"
-        },
-        "networkInterfaceName": {
-            "value": "rdkwin20162914"
-        },
-        "networkSecurityGroupName": {
-            "value": "rdkwin20162-nsg"
-        },
         "adminPassword": {
             "value": "heelgeheim@1"
         },
-        "storageAccountName": {
-            "value": "rsgrdk03disks304"
-        },
-        "storageAccountType": {
-            "value": "Standard_LRS"
-        },
-        "addressPrefix": {
-            "value": "10.0.2.0/24"
-        },
-        "subnetName": {
-            "value": "default"
-        },
-        "subnetPrefix": {
-            "value": "10.0.2.0/24"
-        },
-        "publicIpAddressName": {
-            "value": "rdkwin20162-ip"
-        },
-        "publicIpAddressType": {
-            "value": "Dynamic"
-        },
         "_artifactsLocation": {
             "value": "https://github.com/rexdekoning"
-        },
-        "_artifactsLocationSasToken": {
-            "value": "empty"
         },
         "_artifactsFileName": {
             "value": "/dsc/blob/master/serverdscconfig.ps1.zip?raw=true"
         },
         "_artifactsFunction": {
             "value": "serverdscconfig.ps1\\MyDscConfiguration"
+        },
+        "ipcidr": {
+            "value": "10.0.2.0/24"
         }
     }
 }
